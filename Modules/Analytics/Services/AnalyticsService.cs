@@ -7,24 +7,24 @@ using Microsoft.Extensions.Logging;
 using NetflixApi.Modules.Analytics.DTOs;
 using NetflixApi.Modules.Analytics.Interfaces;
 using NetflixApi.Data;
-using NetflixApi.Models;
+using NetflixApi.Modules.Analytics.Models;
 
 namespace NetflixApi.Modules.Analytics.Services
 {
     public class AnalyticsService : IAnalyticsService
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<AnalyticsService> _logger;
 
-        public AnalyticsService(AppDbContext context, ILogger<AnalyticsService> logger)
+        public AnalyticsService(ApplicationDbContext context, ILogger<AnalyticsService> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        public async Task<bool> TrackEventAsync(int? userId, TrackEventRequestDto request)
+        public async Task<bool> TrackEventAsync(Guid? userId, TrackEventRequestDto request)
         {
-            var analyticsEvent = new NetflixApi.Models.Analytics
+            var analyticsEvent = new AnalyticsEvent
             {
                 UserId = userId,
                 ContentId = request.ContentId,

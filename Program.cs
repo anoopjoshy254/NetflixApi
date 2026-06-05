@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NetflixApi;
+using NetflixApi.Data;
 using NetflixApi.Modules.Auth.Services;
 using NetflixApi.Modules.Users.Services;
 
@@ -19,11 +20,12 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Description = "JWT Authorization header using the Bearer scheme. You can just paste the raw token here.",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -92,6 +94,34 @@ builder.Services.AddScoped<NetflixApi.Modules.Streaming.Services.IHistoryService
 builder.Services.AddScoped<NetflixApi.Modules.Streaming.Services.IDownloadService, NetflixApi.Modules.Streaming.Services.DownloadService>();
 builder.Services.AddScoped<NetflixApi.Modules.Watchlist.Services.IWatchlistService, NetflixApi.Modules.Watchlist.Services.WatchlistService>();
 builder.Services.AddScoped<NetflixApi.Modules.Reviews.Services.IReviewService, NetflixApi.Modules.Reviews.Services.ReviewService>();
+
+// Content Module
+builder.Services.AddScoped<Netflix.API.Modules.Content.Repositories.Interfaces.IGenreRepository, Netflix.API.Modules.Content.Repositories.GenreRepository>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Repositories.Interfaces.IMovieRepository, Netflix.API.Modules.Content.Repositories.MovieRepository>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Repositories.Interfaces.ISeriesRepository, Netflix.API.Modules.Content.Repositories.SeriesRepository>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Repositories.Interfaces.ISeasonRepository, Netflix.API.Modules.Content.Repositories.SeasonRepository>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Repositories.Interfaces.IEpisodeRepository, Netflix.API.Modules.Content.Repositories.EpisodeRepository>();
+
+builder.Services.AddScoped<Netflix.API.Modules.Content.Services.Interfaces.IGenreService, Netflix.API.Modules.Content.Services.GenreService>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Services.Interfaces.IMovieService, Netflix.API.Modules.Content.Services.MovieService>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Services.Interfaces.ISeriesService, Netflix.API.Modules.Content.Services.SeriesService>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Services.Interfaces.ISeasonService, Netflix.API.Modules.Content.Services.SeasonService>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Services.Interfaces.IEpisodeService, Netflix.API.Modules.Content.Services.EpisodeService>();
+builder.Services.AddScoped<Netflix.API.Modules.Content.Services.Interfaces.ISearchService, Netflix.API.Modules.Content.Services.SearchService>();
+
+// Refactored Repositories
+builder.Services.AddScoped<NetflixApi.Modules.Payments.Repositories.Interfaces.IPaymentRepository, NetflixApi.Modules.Payments.Repositories.PaymentRepository>();
+builder.Services.AddScoped<NetflixApi.Modules.Subscription.Repositories.Interfaces.ISubscriptionRepository, NetflixApi.Modules.Subscription.Repositories.SubscriptionRepository>();
+builder.Services.AddScoped<NetflixApi.Modules.Notifications.Repositories.Interfaces.INotificationRepository, NetflixApi.Modules.Notifications.Repositories.NotificationRepository>();
+builder.Services.AddScoped<NetflixApi.Modules.Analytics.Repositories.Interfaces.IAnalyticsRepository, NetflixApi.Modules.Analytics.Repositories.AnalyticsRepository>();
+
+// Payment Services Registration
+builder.Services.Configure<NetflixApi.Modules.Payments.Models.RazorpaySettings>(builder.Configuration.GetSection("Razorpay"));
+builder.Services.AddScoped<NetflixApi.Modules.Payments.Interfaces.IPaymentService, NetflixApi.Modules.Payments.Services.PaymentService>();
+
+// Email Service Registration
+builder.Services.Configure<NetflixApi.Modules.Notifications.Models.EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<NetflixApi.Modules.Notifications.Interfaces.IEmailService, NetflixApi.Modules.Notifications.Services.SmtpEmailService>();
 
 var app = builder.Build();
 

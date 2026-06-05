@@ -6,18 +6,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetflixApi.Modules.Subscription.DTOs;
 using NetflixApi.Modules.Subscription.Interfaces;
-// Assumed namespaces for AppDbContext and Models based on the team's structure
+// Assumed namespaces for ApplicationDbContext and Models based on the team's structure
 using NetflixApi.Data;
-using NetflixApi.Models;
+using NetflixApi.Modules.Subscription.Models;
 
 namespace NetflixApi.Modules.Subscription.Services
 {
     public class SubscriptionService : ISubscriptionService
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<SubscriptionService> _logger;
 
-        public SubscriptionService(AppDbContext context, ILogger<SubscriptionService> logger)
+        public SubscriptionService(ApplicationDbContext context, ILogger<SubscriptionService> logger)
         {
             _context = context;
             _logger = logger;
@@ -39,7 +39,7 @@ namespace NetflixApi.Modules.Subscription.Services
             });
         }
 
-        public async Task<bool> SubscribeAsync(int userId, int planId)
+        public async Task<bool> SubscribeAsync(Guid userId, int planId)
         {
             var activeSub = await _context.UserSubscriptions
                 .FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "Active");
@@ -64,17 +64,17 @@ namespace NetflixApi.Modules.Subscription.Services
             return true;
         }
 
-        public async Task<bool> UpgradeAsync(int userId, int newPlanId)
+        public async Task<bool> UpgradeAsync(Guid userId, int newPlanId)
         {
             return await ChangePlanAsync(userId, newPlanId, isUpgrade: true);
         }
 
-        public async Task<bool> DowngradeAsync(int userId, int newPlanId)
+        public async Task<bool> DowngradeAsync(Guid userId, int newPlanId)
         {
             return await ChangePlanAsync(userId, newPlanId, isUpgrade: false);
         }
 
-        private async Task<bool> ChangePlanAsync(int userId, int newPlanId, bool isUpgrade)
+        private async Task<bool> ChangePlanAsync(Guid userId, int newPlanId, bool isUpgrade)
         {
             var activeSub = await _context.UserSubscriptions
                 .Include(s => s.Plan)
@@ -94,7 +94,7 @@ namespace NetflixApi.Modules.Subscription.Services
             return true;
         }
 
-        public async Task<bool> CancelAsync(int userId)
+        public async Task<bool> CancelAsync(Guid userId)
         {
             var activeSub = await _context.UserSubscriptions
                 .FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "Active");
@@ -107,7 +107,7 @@ namespace NetflixApi.Modules.Subscription.Services
             return true;
         }
 
-        public async Task<UserSubscriptionDto> GetMySubscriptionAsync(int userId)
+        public async Task<UserSubscriptionDto> GetMySubscriptionAsync(Guid userId)
         {
             var sub = await _context.UserSubscriptions
                 .Include(s => s.Plan)
@@ -127,7 +127,7 @@ namespace NetflixApi.Modules.Subscription.Services
             };
         }
 
-        public async Task<SubscriptionStatusDto> GetStatusAsync(int userId)
+        public async Task<SubscriptionStatusDto> GetStatusAsync(Guid userId)
         {
             var sub = await _context.UserSubscriptions
                 .Include(s => s.Plan)
@@ -142,7 +142,7 @@ namespace NetflixApi.Modules.Subscription.Services
             };
         }
 
-        public async Task<bool> IsActiveAsync(int userId)
+        public async Task<bool> IsActiveAsync(Guid userId)
         {
             var sub = await _context.UserSubscriptions
                 .FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "Active");

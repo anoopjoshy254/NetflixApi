@@ -84,10 +84,10 @@ namespace NetflixApi.Modules.Subscription.Controllers
             return Ok(status);
         }
 
-        private int GetUserId()
+        private Guid GetUserId()
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.TryParse(userIdClaim, out var userId) ? userId : 0;
+            return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
         }
     }
 }

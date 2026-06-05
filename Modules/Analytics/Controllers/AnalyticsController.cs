@@ -21,9 +21,9 @@ namespace NetflixApi.Modules.Analytics.Controllers
         [HttpPost("track")]
         public async Task<IActionResult> TrackEvent([FromBody] TrackEventRequestDto request)
         {
-            int? userId = null;
+            Guid? userId = null;
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (int.TryParse(userIdClaim, out var parsedId))
+            if (Guid.TryParse(userIdClaim, out var parsedId))
             {
                 userId = parsedId;
             }

@@ -6,12 +6,12 @@ namespace NetflixApi.Modules.Notifications.Interfaces
 {
     public interface INotificationService
     {
-        Task<IEnumerable<NotificationDto>> GetUserNotificationsAsync(int userId);
-        Task<bool> MarkAsReadAsync(int userId, int notificationId);
-        Task<bool> MarkAllAsReadAsync(int userId);
+        Task<IEnumerable<NotificationDto>> GetUserNotificationsAsync(Guid userId);
+        Task<bool> MarkAsReadAsync(Guid userId, int notificationId);
+        Task<bool> MarkAllAsReadAsync(Guid userId);
         
-        Task SendBillingAlertAsync(int userId, string message);
-        Task SendNewContentAlertAsync(int userId, string contentTitle);
-        Task SendSubscriptionExpiryAlertAsync(int userId, int daysLeft);
+        Task SendBillingAlertAsync(Guid userId, string message);
+        Task SendNewContentAlertAsync(Guid userId, string contentTitle);
+        Task SendSubscriptionExpiryAlertAsync(Guid userId, int daysLeft);
     }
 }

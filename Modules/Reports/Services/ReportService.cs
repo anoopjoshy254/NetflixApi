@@ -12,10 +12,10 @@ namespace NetflixApi.Modules.Reports.Services
 {
     public class ReportService : IReportService
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<ReportService> _logger;
 
-        public ReportService(AppDbContext context, ILogger<ReportService> logger)
+        public ReportService(ApplicationDbContext context, ILogger<ReportService> logger)
         {
             _context = context;
             _logger = logger;

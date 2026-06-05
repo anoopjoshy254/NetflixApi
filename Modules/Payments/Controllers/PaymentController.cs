@@ -61,10 +61,10 @@ namespace NetflixApi.Modules.Payments.Controllers
             return Ok(new { message = "Refund requested successfully" });
         }
 
-        private int GetUserId()
+        private Guid GetUserId()
         {
             var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.TryParse(userIdClaim, out var userId) ? userId : 0;
+            return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
         }
     }
 }

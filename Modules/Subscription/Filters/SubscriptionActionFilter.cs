@@ -18,7 +18,7 @@ namespace NetflixApi.Modules.Subscription.Filters
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var userIdClaim = context.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (int.TryParse(userIdClaim, out var userId))
+            if (Guid.TryParse(userIdClaim, out var userId))
             {
                 var isActive = await _subscriptionService.IsActiveAsync(userId);
                 if (!isActive)

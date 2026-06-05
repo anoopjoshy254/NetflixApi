@@ -14,9 +14,9 @@ namespace NetflixApi.Modules.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AdminController(AppDbContext context)
+        public AdminController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -31,7 +31,7 @@ namespace NetflixApi.Modules.Admin.Controllers
             var activeSubscriptions = await _context.UserSubscriptions.CountAsync(s => s.Status == "Active");
             
             // Note: Assuming Content table is named Contents or Content in DbContext
-            var totalContent = await _context.Contents.CountAsync(); 
+            var totalContent = await _context.Movies.CountAsync(); 
             
             var totalRevenue = await _context.Payments
                 .Where(p => p.Status == "Success" && p.CreatedAt.Month == currentMonth && p.CreatedAt.Year == currentYear)
@@ -77,7 +77,7 @@ namespace NetflixApi.Modules.Admin.Controllers
         }
 
         [HttpPut("users/{id}/ban")]
-        public async Task<IActionResult> BanUser(int id)
+        public async Task<IActionResult> BanUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) return NotFound();
@@ -88,7 +88,7 @@ namespace NetflixApi.Modules.Admin.Controllers
         }
 
         [HttpPut("users/{id}/unban")]
-        public async Task<IActionResult> UnbanUser(int id)
+        public async Task<IActionResult> UnbanUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) return NotFound();

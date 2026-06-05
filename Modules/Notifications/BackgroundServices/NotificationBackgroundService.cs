@@ -41,7 +41,7 @@ namespace NetflixApi.Modules.Notifications.BackgroundServices
                     await Task.Delay(delay, stoppingToken);
 
                     using var scope = _serviceProvider.CreateScope();
-                    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
 
                     var expiringSubscriptions = await dbContext.UserSubscriptions

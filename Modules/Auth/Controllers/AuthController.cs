@@ -36,6 +36,25 @@ namespace NetflixApi.Modules.Auth.Controllers
             }
         }
 
+        [HttpPost("register-admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterRequestDto dto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ApiResponse<object>.ErrorResponse("Invalid payload", ModelState));
+                }
+
+                await _authService.RegisterAdminAsync(dto);
+                return Ok(ApiResponse<object>.SuccessResponse(null, "Admin registered successfully."));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponse<object>.ErrorResponse(ex.Message));
+            }
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
         {

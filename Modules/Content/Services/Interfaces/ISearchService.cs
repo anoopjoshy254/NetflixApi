@@ -1,5 +1,10 @@
-namespace Netflix.API.Modules.Content.Services.Interfaces;
+using System.Threading.Tasks;
+using Netflix.API.Modules.Content.DTOs.Search;
 
-public interface ISearchService
+namespace Netflix.API.Modules.Content.Services.Interfaces
 {
+    public interface ISearchService
+    {
+        Task<SearchResponseDto> SearchAsync(string query);
+    }
 }

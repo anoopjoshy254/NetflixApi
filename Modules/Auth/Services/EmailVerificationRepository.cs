@@ -1,3 +1,4 @@
+using NetflixApi.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NetflixApi.Modules.Auth.Models;

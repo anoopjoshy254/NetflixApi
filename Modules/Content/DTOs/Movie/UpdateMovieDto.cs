@@ -1,5 +1,10 @@
-namespace Netflix.API.Modules.Content.DTOs.Movie;
+using System;
+using System.Collections.Generic;
 
-public class UpdateMovieDto
+namespace Netflix.API.Modules.Content.DTOs.Movie
 {
+    public class UpdateMovieDto : CreateMovieDto
+    {
+        public bool IsActive { get; set; }
+    }
 }

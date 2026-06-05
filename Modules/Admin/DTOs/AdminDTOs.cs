@@ -20,7 +20,7 @@ namespace NetflixApi.Modules.Admin.DTOs
 
     public class UserDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
         public string SubscriptionStatus { get; set; }
@@ -29,7 +29,7 @@ namespace NetflixApi.Modules.Admin.DTOs
     public class AdminSubscriptionDto
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public string UserEmail { get; set; }
         public string PlanName { get; set; }
         public string Status { get; set; }

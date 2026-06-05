@@ -1,5 +1,7 @@
-namespace Netflix.API.Modules.Content.DTOs.Genre;
-
-public class CreateGenreDto
+namespace Netflix.API.Modules.Content.DTOs.Genre
 {
+    public class CreateGenreDto
+    {
+        public string Name { get; set; } = string.Empty;
+    }
 }

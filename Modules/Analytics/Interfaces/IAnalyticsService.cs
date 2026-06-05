@@ -6,7 +6,7 @@ namespace NetflixApi.Modules.Analytics.Interfaces
 {
     public interface IAnalyticsService
     {
-        Task<bool> TrackEventAsync(int? userId, TrackEventRequestDto request);
+        Task<bool> TrackEventAsync(Guid? userId, TrackEventRequestDto request);
         Task<IEnumerable<PopularContentDto>> GetPopularContentAsync();
         Task<WatchStatsResponseDto> GetWatchStatsAsync(int page, int pageSize);
         Task<IEnumerable<RevenueTrendDto>> GetRevenueTrendAsync();

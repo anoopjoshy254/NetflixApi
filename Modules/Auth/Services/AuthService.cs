@@ -5,6 +5,7 @@ using NetflixApi.Modules.Auth.Models;
 using NetflixApi.Modules.Users.Models;
 using NetflixApi.Modules.Users.Services;
 using NetflixApi.Modules.Users.DTOs;
+using NetflixApi.Modules.Notifications.Interfaces;
 
 namespace NetflixApi.Modules.Auth.Services
 {
@@ -17,6 +18,7 @@ namespace NetflixApi.Modules.Auth.Services
         private readonly IPasswordResetRepository _passwordResetRepository;
         private readonly IEmailVerificationRepository _emailVerificationRepository;
         private readonly IJwtService _jwtService;
+        private readonly IEmailService _emailService;
 
         public AuthService(
             IUserRepository userRepository,
@@ -25,7 +27,8 @@ namespace NetflixApi.Modules.Auth.Services
             IRefreshTokenRepository refreshTokenRepository,
             IPasswordResetRepository passwordResetRepository,
             IEmailVerificationRepository emailVerificationRepository,
-            IJwtService jwtService)
+            IJwtService jwtService,
+            IEmailService emailService)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -34,6 +37,7 @@ namespace NetflixApi.Modules.Auth.Services
             _passwordResetRepository = passwordResetRepository;
             _emailVerificationRepository = emailVerificationRepository;
             _jwtService = jwtService;
+            _emailService = emailService;
         }
 
         public async Task RegisterAsync(RegisterRequestDto dto)
@@ -78,18 +82,64 @@ namespace NetflixApi.Modules.Auth.Services
             };
             await _userRoleRepository.AddAsync(userRole);
 
-            // Generate email verification token
-            var token = Guid.NewGuid().ToString("N");
+            // Generate 6-digit OTP
+            var token = new Random().Next(100000, 999999).ToString();
             var emailVerification = new EmailVerification
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
                 Token = token,
-                ExpiresAt = DateTime.UtcNow.AddDays(1), // 24 hour expiry
+                ExpiresAt = DateTime.UtcNow.AddHours(1), // 1 hour expiry for OTP
                 Verified = false
             };
 
             await _emailVerificationRepository.AddAsync(emailVerification);
+            
+            // Send OTP via Brevo Email Service
+            string subject = "Verify Your Netflix Clone Account";
+            string htmlContent = $"<h1>Welcome to Netflix Clone!</h1><p>Your 6-digit verification code is: <strong>{token}</strong></p><p>This code will expire in 1 hour.</p>";
+            await _emailService.SendEmailAsync(user.Email, subject, htmlContent);
+        }
+
+        public async Task RegisterAdminAsync(RegisterRequestDto dto)
+        {
+            var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
+            if (existingUser != null)
+            {
+                throw new Exception("Email address is already in use.");
+            }
+
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = dto.Email,
+                PasswordHash = passwordHash,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                PhoneNumber = dto.PhoneNumber,
+                IsActive = true,
+                IsEmailVerified = true, // Auto-verify admin
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _userRepository.AddAsync(user);
+
+            // Assign Admin role
+            var role = await _roleRepository.GetByNameAsync("Admin");
+            if (role == null)
+            {
+                role = new Role { Name = "Admin" };
+                await _roleRepository.AddAsync(role);
+            }
+
+            var userRole = new UserRole
+            {
+                UserId = user.Id,
+                RoleId = role.Id
+            };
+            await _userRoleRepository.AddAsync(userRole);
         }
 
         public async Task<AuthResponseDto> LoginAsync(LoginRequestDto dto)

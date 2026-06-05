@@ -25,7 +25,7 @@ namespace NetflixApi.Modules.Analytics.DTOs
 
     public class UserWatchStatDto
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public int TotalWatchEvents { get; set; }
     }
 

@@ -6,9 +6,9 @@ namespace NetflixApi.Modules.Payments.Interfaces
 {
     public interface IPaymentService
     {
-        Task<OrderResponseDto> CreateOrderAsync(int userId, decimal amount, string currency);
-        Task<bool> VerifyPaymentAsync(int userId, VerifyPaymentRequestDto request);
-        Task<IEnumerable<PaymentHistoryDto>> GetHistoryAsync(int userId);
+        Task<OrderResponseDto> CreateOrderAsync(Guid userId, decimal amount, string currency);
+        Task<bool> VerifyPaymentAsync(Guid userId, VerifyPaymentRequestDto request);
+        Task<IEnumerable<PaymentHistoryDto>> GetHistoryAsync(Guid userId);
         Task<InvoiceDto> GetInvoiceAsync(int invoiceId);
         Task<bool> RefundPaymentAsync(int paymentId, string reason);
     }

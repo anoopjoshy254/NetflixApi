@@ -10,24 +10,24 @@ using NetflixApi.Modules.Payments.Interfaces;
 using NetflixApi.Modules.Payments.Models;
 using Razorpay.Api;
 using NetflixApi.Data;
-using NetflixApi.Models;
+using NetflixApi.Modules.Payments.Models;
 
 namespace NetflixApi.Modules.Payments.Services
 {
     public class PaymentService : IPaymentService
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly RazorpaySettings _razorpaySettings;
         private readonly ILogger<PaymentService> _logger;
 
-        public PaymentService(AppDbContext context, IOptions<RazorpaySettings> razorpaySettings, ILogger<PaymentService> logger)
+        public PaymentService(ApplicationDbContext context, IOptions<RazorpaySettings> razorpaySettings, ILogger<PaymentService> logger)
         {
             _context = context;
             _razorpaySettings = razorpaySettings.Value;
             _logger = logger;
         }
 
-        public async Task<OrderResponseDto> CreateOrderAsync(int userId, decimal amount, string currency)
+        public async Task<OrderResponseDto> CreateOrderAsync(Guid userId, decimal amount, string currency)
         {
             var client = new RazorpayClient(_razorpaySettings.KeyId, _razorpaySettings.KeySecret);
 
@@ -41,7 +41,7 @@ namespace NetflixApi.Modules.Payments.Services
             var order = client.Order.Create(options);
             string orderId = order["id"].ToString();
 
-            var payment = new Payment
+            var payment = new NetflixApi.Modules.Payments.Models.Payment
             {
                 UserId = userId,
                 Amount = amount,
@@ -63,7 +63,7 @@ namespace NetflixApi.Modules.Payments.Services
             };
         }
 
-        public async Task<bool> VerifyPaymentAsync(int userId, VerifyPaymentRequestDto request)
+        public async Task<bool> VerifyPaymentAsync(Guid userId, VerifyPaymentRequestDto request)
         {
             var attributes = new Dictionary<string, string>
             {
@@ -89,7 +89,7 @@ namespace NetflixApi.Modules.Payments.Services
             payment.RazorpayPaymentId = request.RazorpayPaymentId;
             payment.RazorpaySignature = request.RazorpaySignature;
 
-            var invoice = new Invoice
+            var invoice = new NetflixApi.Modules.Payments.Models.Invoice
             {
                 UserId = userId,
                 PaymentId = payment.Id,
@@ -110,7 +110,7 @@ namespace NetflixApi.Modules.Payments.Services
             return true;
         }
 
-        public async Task<IEnumerable<PaymentHistoryDto>> GetHistoryAsync(int userId)
+        public async Task<IEnumerable<PaymentHistoryDto>> GetHistoryAsync(Guid userId)
         {
             var payments = await _context.Payments
                 .Where(p => p.UserId == userId)
@@ -151,7 +151,7 @@ namespace NetflixApi.Modules.Payments.Services
             var payment = await _context.Payments.FindAsync(paymentId);
             if (payment == null || payment.Status != "Success") return false;
 
-            var refund = new Refund
+            var refund = new NetflixApi.Modules.Payments.Models.Refund
             {
                 PaymentId = paymentId,
                 Reason = reason,

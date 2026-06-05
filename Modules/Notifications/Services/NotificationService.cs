@@ -7,22 +7,22 @@ using Microsoft.Extensions.Logging;
 using NetflixApi.Modules.Notifications.DTOs;
 using NetflixApi.Modules.Notifications.Interfaces;
 using NetflixApi.Data;
-using NetflixApi.Models;
+using NetflixApi.Modules.Notifications.Models;
 
 namespace NetflixApi.Modules.Notifications.Services
 {
     public class NotificationService : INotificationService
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService(AppDbContext context, ILogger<NotificationService> logger)
+        public NotificationService(ApplicationDbContext context, ILogger<NotificationService> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<NotificationDto>> GetUserNotificationsAsync(int userId)
+        public async Task<IEnumerable<NotificationDto>> GetUserNotificationsAsync(Guid userId)
         {
             var notifications = await _context.Notifications
                 .Where(n => n.UserId == userId)
@@ -42,7 +42,7 @@ namespace NetflixApi.Modules.Notifications.Services
             return notifications;
         }
 
-        public async Task<bool> MarkAsReadAsync(int userId, int notificationId)
+        public async Task<bool> MarkAsReadAsync(Guid userId, int notificationId)
         {
             var notification = await _context.Notifications
                 .FirstOrDefaultAsync(n => n.Id == notificationId && n.UserId == userId);
@@ -54,7 +54,7 @@ namespace NetflixApi.Modules.Notifications.Services
             return true;
         }
 
-        public async Task<bool> MarkAllAsReadAsync(int userId)
+        public async Task<bool> MarkAllAsReadAsync(Guid userId)
         {
             var notifications = await _context.Notifications
                 .Where(n => n.UserId == userId && !n.IsRead)
@@ -69,7 +69,7 @@ namespace NetflixApi.Modules.Notifications.Services
             return true;
         }
 
-        public async Task SendBillingAlertAsync(int userId, string message)
+        public async Task SendBillingAlertAsync(Guid userId, string message)
         {
             var notification = new Notification
             {
@@ -84,7 +84,7 @@ namespace NetflixApi.Modules.Notifications.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task SendNewContentAlertAsync(int userId, string contentTitle)
+        public async Task SendNewContentAlertAsync(Guid userId, string contentTitle)
         {
             var notification = new Notification
             {
@@ -99,7 +99,7 @@ namespace NetflixApi.Modules.Notifications.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task SendSubscriptionExpiryAlertAsync(int userId, int daysLeft)
+        public async Task SendSubscriptionExpiryAlertAsync(Guid userId, int daysLeft)
         {
             var notification = new Notification
             {

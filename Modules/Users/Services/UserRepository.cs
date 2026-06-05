@@ -1,3 +1,4 @@
+using NetflixApi.Data;
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;

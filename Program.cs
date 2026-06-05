@@ -13,6 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Configure Swagger with JWT Support
 builder.Services.AddSwaggerGen(c =>
 {
@@ -133,6 +143,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Add CORS middleware before Authentication and Authorization
+app.UseCors("AllowAll");
 
 // Add Authentication and Authorization to the pipeline
 app.UseAuthentication();

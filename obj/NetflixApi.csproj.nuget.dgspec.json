@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Anoop.K\\Downloads\\dotnet\\NetflixApi\\NetflixApi.csproj": {}
+    "C:\\Users\\Ashna.Sanil\\Netflix\\NetflixApi\\NetflixApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Anoop.K\\Downloads\\dotnet\\NetflixApi\\NetflixApi.csproj": {
+    "C:\\Users\\Ashna.Sanil\\Netflix\\NetflixApi\\NetflixApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Anoop.K\\Downloads\\dotnet\\NetflixApi\\NetflixApi.csproj",
+        "projectUniqueName": "C:\\Users\\Ashna.Sanil\\Netflix\\NetflixApi\\NetflixApi.csproj",
         "projectName": "NetflixApi",
-        "projectPath": "C:\\Users\\Anoop.K\\Downloads\\dotnet\\NetflixApi\\NetflixApi.csproj",
-        "packagesPath": "C:\\Users\\Anoop.K\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Anoop.K\\Downloads\\dotnet\\NetflixApi\\obj\\",
+        "projectPath": "C:\\Users\\Ashna.Sanil\\Netflix\\NetflixApi\\NetflixApi.csproj",
+        "packagesPath": "C:\\Users\\Ashna.Sanil\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ashna.Sanil\\Netflix\\NetflixApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Anoop.K\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Ashna.Sanil\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -43,13 +43,33 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.27, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [

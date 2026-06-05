@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NetflixApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a232dd15d6f22bc7cc38152f473ee321b244b77")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+94ffa9db62728f5efdcabbe39a8b69b7bb3ba782")]
 [assembly: System.Reflection.AssemblyProductAttribute("NetflixApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NetflixApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

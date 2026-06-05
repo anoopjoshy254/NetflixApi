@@ -1,0 +1,10 @@
+using System;
+
+namespace NetflixApi.Modules.Users.Models
+{
+    public class UserRole
+    {
+        public Guid UserId { get; set; }
+        public Guid RoleId { get; set; }
+    }
+}

@@ -5,6 +5,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Team Member 3 Modules
+builder.Services.AddControllers();
+
+// Register Streaming Services
+builder.Services.AddScoped<NetflixApi.Modules.Streaming.Services.IStreamingService, NetflixApi.Modules.Streaming.Services.StreamingService>();
+builder.Services.AddScoped<NetflixApi.Modules.Streaming.Services.IHistoryService, NetflixApi.Modules.Streaming.Services.HistoryService>();
+builder.Services.AddScoped<NetflixApi.Modules.Streaming.Services.IDownloadService, NetflixApi.Modules.Streaming.Services.DownloadService>();
+
+// Register Watchlist Services
+builder.Services.AddScoped<NetflixApi.Modules.Watchlist.Services.IWatchlistService, NetflixApi.Modules.Watchlist.Services.WatchlistService>();
+
+// Register Reviews Services
+builder.Services.AddScoped<NetflixApi.Modules.Reviews.Services.IReviewService, NetflixApi.Modules.Reviews.Services.ReviewService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -15,6 +29,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
 
 var summaries = new[]
 {
